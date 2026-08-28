@@ -38,6 +38,12 @@ filterExtended	KEYWORD2
 loopback	KEYWORD2
 sleep	KEYWORD2
 wakeup	KEYWORD2
+setMode	KEYWORD2
+setConfigMode	KEYWORD2
+setNormalMode	KEYWORD2
+setListenOnlyMode	KEYWORD2
+setLoopbackMode	KEYWORD2
+setSleepMode	KEYWORD2
 
 setPins	KEYWORD2
 setSPIFrequency	KEYWORD2

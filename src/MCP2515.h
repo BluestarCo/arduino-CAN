@@ -12,6 +12,12 @@
 
 #define MCP2515_DEFAULT_CLOCK_FREQUENCY 16e6
 
+#define MCP2515_MODE_NORMAL     0x00
+#define MCP2515_MODE_SLEEP      0x20
+#define MCP2515_MODE_LOOPBACK   0x40
+#define MCP2515_MODE_LISTENONLY 0x60
+#define MCP2515_MODE_CONFIG     0x80
+
 #if defined(ARDUINO_ARCH_SAMD) && defined(PIN_SPI_MISO) && defined(PIN_SPI_MOSI) && defined(PIN_SPI_SCK) && (PIN_SPI_MISO == 10) && (PIN_SPI_MOSI == 8) && (PIN_SPI_SCK == 9)
 // Arduino MKR board: MKR CAN shield CS is pin 3, INT is pin 7
 #define MCP2515_DEFAULT_CS_PIN          3
@@ -45,6 +51,15 @@ public:
   virtual int loopback();
   virtual int sleep();
   virtual int wakeup();
+
+  // Set the CAN controller mode (MCP2515_MODE_* constants).
+  // Returns 1 on success, 0 on failure.
+  virtual int setMode(int mode);
+  int setConfigMode();
+  int setNormalMode();
+  int setListenOnlyMode();
+  int setLoopbackMode();
+  int setSleepMode();
 
   void setPins(int cs = MCP2515_DEFAULT_CS_PIN, int irq = MCP2515_DEFAULT_INT_PIN);
   void setSPIFrequency(uint32_t frequency);

@@ -270,3 +270,31 @@ Wake up the CAN contoller if it was previously in sleep mode.
 ```arduino
 CAN.wakeup();
 ```
+
+### Set mode
+
+Set the CAN controller to a specific mode using the `MCP2515_MODE_*` constants:
+
+* `MCP2515_MODE_NORMAL`
+* `MCP2515_MODE_SLEEP`
+* `MCP2515_MODE_LOOPBACK`
+* `MCP2515_MODE_LISTENONLY`
+* `MCP2515_MODE_CONFIG`
+
+```arduino
+CAN.setMode(MCP2515_MODE_CONFIG);
+CAN.setMode(MCP2515_MODE_LISTENONLY);
+CAN.setMode(MCP2515_MODE_NORMAL);
+```
+
+Convenience wrappers (same API as the autowp/arduino-mcp2515 library):
+
+```arduino
+CAN.setConfigMode();
+CAN.setNormalMode();
+CAN.setListenOnlyMode();
+CAN.setLoopbackMode();
+CAN.setSleepMode();
+```
+
+Returns `1` on success, `0` on failure. Note: changing filters/bit timing requires `MCP2515_MODE_CONFIG`; the controller must be back in `MCP2515_MODE_NORMAL` for normal operation.

@@ -9,6 +9,9 @@
 #define REG_TXRTSCTRL              0x0d
 
 #define REG_CANCTRL                0x0f
+#define REG_CANSTAT                0x0e
+
+#define MODE_MASK                  0xE0
 
 #define REG_CNF3                   0x28
 #define REG_CNF2                   0x29
@@ -391,6 +394,43 @@ int MCP2515Class::wakeup()
   }
 
   return 1;
+}
+
+int MCP2515Class::setMode(int mode)
+{
+  mode &= MODE_MASK;
+
+  modifyRegister(REG_CANCTRL, MODE_MASK, mode);
+  if ((readRegister(REG_CANSTAT) & MODE_MASK) != mode) {
+    return 0;
+  }
+
+  return 1;
+}
+
+int MCP2515Class::setConfigMode()
+{
+  return setMode(MCP2515_MODE_CONFIG);
+}
+
+int MCP2515Class::setNormalMode()
+{
+  return setMode(MCP2515_MODE_NORMAL);
+}
+
+int MCP2515Class::setListenOnlyMode()
+{
+  return setMode(MCP2515_MODE_LISTENONLY);
+}
+
+int MCP2515Class::setLoopbackMode()
+{
+  return setMode(MCP2515_MODE_LOOPBACK);
+}
+
+int MCP2515Class::setSleepMode()
+{
+  return setMode(MCP2515_MODE_SLEEP);
 }
 
 void MCP2515Class::setPins(int cs, int irq)
