@@ -44,6 +44,7 @@ setNormalMode	KEYWORD2
 setListenOnlyMode	KEYWORD2
 setLoopbackMode	KEYWORD2
 setSleepMode	KEYWORD2
+setNormalOneShotMode	KEYWORD2
 
 setPins	KEYWORD2
 setSPIFrequency	KEYWORD2
@@ -53,3 +54,10 @@ dumpRegisters	KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+MCP2515_MODE_NORMAL	LITERAL1
+MCP2515_MODE_ONESHOT	LITERAL1
+MCP2515_MODE_SLEEP	LITERAL1
+MCP2515_MODE_LOOPBACK	LITERAL1
+MCP2515_MODE_LISTENONLY	LITERAL1
+MCP2515_MODE_CONFIG	LITERAL1

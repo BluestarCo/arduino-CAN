@@ -15,7 +15,7 @@ Initialize the library with the specified bit rate.
 ```arduino
 CAN.begin(bitrate);
 ```
- * `bitrate` - bit rate in bits per seconds (bps) (`1000E3`, `500E3`, `250E3`, `200E3`, `125E3`, `100E3`, `80E3`, `50E3`, `40E3`, `20E3`, `10E3`, `5E3`)
+* `bitrate` - bit rate in bits per seconds (bps) (`1000E3`, `500E3`, `250E3`, `200E3`, `125E3`, `100E3`, `80E3`, `50E3`, `40E3`, `20E3`, `10E3`, `5E3`)
 
 Returns `1` on success, `0` on failure.
 
@@ -28,8 +28,8 @@ Override the default `CS` and `INT` pins used by the library. **Must** be called
 ```arduino
 CAN.setPins(cs, irq);
 ```
- * `cs` - new chip select pin to use, defaults to `10`
- * `irq` - new INT pin to use, defaults to `2`.  **Must** be interrupt capable via [attachInterrupt(...)](https://www.arduino.cc/en/Reference/AttachInterrupt).
+* `cs` - new chip select pin to use, defaults to `10`
+* `irq` - new INT pin to use, defaults to `2`.  **Must** be interrupt capable via [attachInterrupt(...)](https://www.arduino.cc/en/Reference/AttachInterrupt).
 
 This call is optional and only needs to be used if you need to change the default pins used.
 
@@ -40,8 +40,8 @@ Override the default `CTX` and `CRX` pins used by the library. **Must** be calle
 ```arduino
 CAN.setPins(rx, tx);
 ```
- * `rx` - new CRX pin to use, defaults to `4`
- * `tx` - new CTX pin to use, defaults to `5`.
+* `rx` - new CRX pin to use, defaults to `4`
+* `tx` - new CTX pin to use, defaults to `5`.
 
 This call is optional and only needs to be used if you need to change the default pins used.
 
@@ -54,7 +54,7 @@ Override the default SPI frequency of 10 MHz used by the library. **Must** be ca
 ```arduino
 CAN.setSPIFrequency(frequency);
 ```
- * `frequency` - new SPI frequency to use, defaults to `10E6`
+* `frequency` - new SPI frequency to use, defaults to `10E6`
 
 This call is optional and only needs to be used if you need to change the default SPI frequency used. Some logic level converters cannot support high speeds such as 10 MHz, so a lower SPI frequency can be selected with `CAN.setSPIFrequency(frequency)`.
 
@@ -67,7 +67,7 @@ Override the default clock source frequency that is connected to the MCP2515. **
 ```arduino
 CAN.setClockFrequency(clockFrequency);
 ```
- * `clockFrequency` - new clock frequency to use (`8E6`, `16E6`) connected to MCP2515, defaults to `16 Mhz`
+* `clockFrequency` - new clock frequency to use (`8E6`, `16E6`) connected to MCP2515, defaults to `16 Mhz`
 
 This call is optional and only needs to be used if you need to change the clock source frequency connected to the MCP2515. Most shields have a 16 MHz clock source on board, some breakout boards have a 8 MHz source.
 
@@ -95,9 +95,9 @@ CAN.beginExtendedPacket(id, dlc);
 CAN.beginExtendedPacket(id, dlc, rtr);
 ```
 
- * `id` - 11-bit id (standard packet) or 29-bit packet id (extended packet)
- * `dlc` - (optional) value of Data Length Code (DLC) field of packet, default is size of data written in packet
- * `rtr` - (optional) value of Remote Transmission Request (RTR) field of packet (`false` or `true`), defaults to `false`. RTR packets contain no data, the DLC field of the packet represents the requested length.
+* `id` - 11-bit id (standard packet) or 29-bit packet id (extended packet)
+* `dlc` - (optional) value of Data Length Code (DLC) field of packet, default is size of data written in packet
+* `rtr` - (optional) value of Remote Transmission Request (RTR) field of packet (`false` or `true`), defaults to `false`. RTR packets contain no data, the DLC field of the packet represents the requested length.
 
 Returns `1` on success, `0` on failure.
 
@@ -155,7 +155,7 @@ void onReceive(int packetSize) {
 }
 ```
 
- * `onReceive` - function to call when a packet is received.
+* `onReceive` - function to call when a packet is received.
 
 ### Packet ID
 
@@ -232,8 +232,8 @@ CAN.filterExtended(id);
 CAN.filterExtended(id, mask);
 ```
 
- * `id` - 11-bit id (standard packet) or 29-bit packet id (extended packet)
- * `mask` - (optional) 11-bit mask (standard packet) or 29-bit mask (extended packet), defaults to `0x7ff` or `0x1fffffff` (extended)
+* `id` - 11-bit id (standard packet) or 29-bit packet id (extended packet)
+* `mask` - (optional) 11-bit mask (standard packet) or 29-bit mask (extended packet), defaults to `0x7ff` or `0x1fffffff` (extended)
 
 Only packets that meet the following criteria are acknowleged and received, other packets are ignored:
 
@@ -276,6 +276,7 @@ CAN.wakeup();
 Set the CAN controller to a specific mode using the `MCP2515_MODE_*` constants:
 
 * `MCP2515_MODE_NORMAL`
+* `MCP2515_MODE_ONESHOT` (normal mode with one-shot transmission)
 * `MCP2515_MODE_SLEEP`
 * `MCP2515_MODE_LOOPBACK`
 * `MCP2515_MODE_LISTENONLY`
@@ -285,7 +286,10 @@ Set the CAN controller to a specific mode using the `MCP2515_MODE_*` constants:
 CAN.setMode(MCP2515_MODE_CONFIG);
 CAN.setMode(MCP2515_MODE_LISTENONLY);
 CAN.setMode(MCP2515_MODE_NORMAL);
+CAN.setMode(MCP2515_MODE_ONESHOT);
 ```
+
+The mode change is verified by polling `CANSTAT` for up to 10 ms.
 
 Convenience wrappers (same API as the autowp/arduino-mcp2515 library):
 
@@ -295,6 +299,7 @@ CAN.setNormalMode();
 CAN.setListenOnlyMode();
 CAN.setLoopbackMode();
 CAN.setSleepMode();
+CAN.setNormalOneShotMode();
 ```
 
 Returns `1` on success, `0` on failure. Note: changing filters/bit timing requires `MCP2515_MODE_CONFIG`; the controller must be back in `MCP2515_MODE_NORMAL` for normal operation.

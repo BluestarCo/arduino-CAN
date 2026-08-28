@@ -12,6 +12,7 @@
 #define REG_CANSTAT                0x0e
 
 #define MODE_MASK                  0xE0
+#define MODE_OSM                   0x08
 
 #define REG_CNF3                   0x28
 #define REG_CNF2                   0x29
@@ -398,14 +399,31 @@ int MCP2515Class::wakeup()
 
 int MCP2515Class::setMode(int mode)
 {
-  mode &= MODE_MASK;
+  mode &= (MODE_MASK | MODE_OSM);
 
-  modifyRegister(REG_CANCTRL, MODE_MASK, mode);
-  if ((readRegister(REG_CANSTAT) & MODE_MASK) != mode) {
-    return 0;
+  modifyRegister(REG_CANCTRL, MODE_MASK | MODE_OSM, mode);
+
+  // wait up to 10 ms for the mode change to take effect (autowp/arduino-mcp2515 style)
+  unsigned long endTime = millis() + 10;
+  bool modeMatch = false;
+
+  while (millis() < endTime) {
+    // CANSTAT.OPMOD only reflects the REQOP bits, so compare those only
+    uint8_t newMode = readRegister(REG_CANSTAT) & MODE_MASK;
+
+    modeMatch = (newMode == (mode & MODE_MASK));
+
+    if (modeMatch) {
+      break;
+    }
   }
 
-  return 1;
+  return modeMatch ? 1 : 0;
+}
+
+int MCP2515Class::setNormalOneShotMode()
+{
+  return setMode(MCP2515_MODE_ONESHOT);
 }
 
 int MCP2515Class::setConfigMode()

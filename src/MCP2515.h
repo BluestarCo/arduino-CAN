@@ -13,6 +13,7 @@
 #define MCP2515_DEFAULT_CLOCK_FREQUENCY 16e6
 
 #define MCP2515_MODE_NORMAL     0x00
+#define MCP2515_MODE_ONESHOT    0x08
 #define MCP2515_MODE_SLEEP      0x20
 #define MCP2515_MODE_LOOPBACK   0x40
 #define MCP2515_MODE_LISTENONLY 0x60
@@ -60,6 +61,7 @@ public:
   int setListenOnlyMode();
   int setLoopbackMode();
   int setSleepMode();
+  int setNormalOneShotMode();
 
   void setPins(int cs = MCP2515_DEFAULT_CS_PIN, int irq = MCP2515_DEFAULT_INT_PIN);
   void setSPIFrequency(uint32_t frequency);
